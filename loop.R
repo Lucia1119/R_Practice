@@ -38,11 +38,16 @@ wayans <- list(
   Vonnie = list() 
 )
 
-xx=rapply(wayans,length,how = "unlist")
-mm=unname(xx)
-yy=data.frame(mm,namesxx=sub("[0-9]",x=names(xx),replacement = ""),stringsAsFactors = FALSE)
-zz=sub("[0-9]",x=names(xx),replacement = "")
-table(zz)
+# xx=rapply(wayans,length,how = "unlist")
+# mm=unname(xx)
+# yy=data.frame(mm,namesxx=sub("[0-9]",x=names(xx),replacement = ""),stringsAsFactors = FALSE)
+# zz=sub("[0-9]",x=names(xx),replacement = "")
+# table(zz)
+
+rapply(wayans,length,how = "unlist") %>% 
+  sub(pattern = "[0-9]",x=names(.),replacement = "") %>% 
+  table(.)
+
 
 ddply(yy,~namesxx,summarise)
 
