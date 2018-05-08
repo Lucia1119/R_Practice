@@ -10,7 +10,9 @@ mtcars %>% map(mean)
 mtcars[21,] ## return a vector
 mtcars %>% map(21) ## return a list
 
+
 mtcars %>% map_dbl(mean)
+
 
 mtcars %>% map(mean,trim=0.1)
 
@@ -18,8 +20,24 @@ mtcars %>% map(mean,trim=0.1)
 trimMaxMin=function(x,maxPercent=0,minPercent=0){
   x=sort(x)
   len=length(x)
-  lenMax=len*maxPercent+1
-  lenMin=len*(1-minPercent)
+  lenMax=floor(len*maxPercent)+1
+  lenMin=len-floor(len*minPercent)
   x[lenMax:lenMin]
 }
 
+mtcars %>% map(~trimMaxMin(.x,maxPercent = 0.1,minPercent = 0.1)) %>% map_dbl(mean)
+
+
+
+
+
+## group by using map()
+mtcars %>% split(.$cyl) %>% map_int(nrow)
+mtcars %>% split(.$cyl) %>% map_dfr(~map(.,mean))
+mtcars %>% split(.$cyl) %>% map_df(colMeans) %>% t
+
+## group by using ddply
+library(plyr)
+mtcars %>% ddply(.(cyl),nrow)
+mtcars %>% ddply(.(cyl),.fun = colMeans)
+ 
