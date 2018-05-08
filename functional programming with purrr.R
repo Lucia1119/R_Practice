@@ -35,9 +35,14 @@ mtcars %>% map(~trimMaxMin(.x,maxPercent = 0.1,minPercent = 0.1)) %>% map_dbl(me
 mtcars %>% split(.$cyl) %>% map_int(nrow)
 mtcars %>% split(.$cyl) %>% map_dfr(~map(.,mean))
 mtcars %>% split(.$cyl) %>% map_df(colMeans) %>% t
+mtcars %>% split(.$cyl) %>% map(~lm(formula=.$qsec~.$hp,data=.))
+mtcars %>% split(.$cyl) %>% map(~lm(formula=qsec~hp,data=.))
+
+
 
 ## group by using ddply
 library(plyr)
-mtcars %>% ddply(.(cyl),nrow)
+xxx=mtcars %>% ddply(.(cyl),nrow)
 mtcars %>% ddply(.(cyl),.fun = colMeans)
+mtcars %>% ddply(.$cyl,lm(formula = .$qsec~.$hp,data = .)) ##why it's not work?
  
