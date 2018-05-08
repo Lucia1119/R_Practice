@@ -33,16 +33,26 @@ mtcars %>% map(~trimMaxMin(.x,maxPercent = 0.1,minPercent = 0.1)) %>% map_dbl(me
 
 ## group by using map()
 mtcars %>% split(.$cyl) %>% map_int(nrow)
-mtcars %>% split(.$cyl) %>% map_dfr(~map(.,mean))
-mtcars %>% split(.$cyl) %>% map_df(colMeans) %>% t
-mtcars %>% split(.$cyl) %>% map(~lm(formula=.$qsec~.$hp,data=.))
-mtcars %>% split(.$cyl) %>% map(~lm(formula=qsec~hp,data=.))
 
+mtcars %>% split(.$cyl) %>% map_dfr(function(x) { return(map(x, mean)) }) # function
+mtcars %>% split(.$cyl) %>% map_dfr(~map(.,mean)) ## formula, same as function, but cleaner
+mtcars %>% split(.$cyl) %>% map_df(colMeans) %>% t
+
+mtcars %>% split(.$cyl) %>% map(~lm(formula=.$qsec~.$hp,data=.))
+mm=mtcars %>% split(.$cyl) %>% map(~lm(formula=qsec~hp,data=.))
+mtcars %>% split(.$cyl) %>% map(function(x){lm(formula=qsec~hp,data=x)})
+
+
+mmtcars %>% split(.$cyl) %>% map(colMeans)
 
 
 ## group by using ddply
 library(plyr)
-xxx=mtcars %>% ddply(.(cyl),nrow)
+mtcars %>% ddply(.(cyl),nrow)
 mtcars %>% ddply(.(cyl),.fun = colMeans)
-mtcars %>% ddply(.$cyl,lm(formula = .$qsec~.$hp,data = .)) ##why it's not work?
+mtcars %>% ddply(.(cyl),.fun = function(x) {print(1)})
+
+function(x){map(x,lm(formula = .$qsec~.$hp,data = .))}
+mtcars %>% ddply(.(cyl), .fun=function(x){ x %>% map(mean) %>% unlist })
+mtcars %>% ddply(.(cyl), .fun = function(x){x %>% map(~lm(formula=qsec~hp,data=.) %>% .$coefficients)})
  
