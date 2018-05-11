@@ -91,5 +91,11 @@ mtcars %>% ddply(.(cyl), .fun = function(x){x %>% map(~lm(formula=qsec~hp,data=.
 
 ## https://www.r-exercises.com/2018/01/19/functional-programming-with-purrr-exercises-part-2/
 
+## accumulate()
+## detect() 
 vector10=1:10
-vector10 %>% map()
+vector10 %>% accumulate(`*`)
+list(atoz=letters,num=1:10) %>% cross_df
+
+list1 = list('a', data.frame(1:10), TRUE, 1, letters, 153) 
+list1 %>% detect_index(is.numeric)
