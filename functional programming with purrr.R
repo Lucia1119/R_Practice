@@ -92,10 +92,53 @@ mtcars %>% ddply(.(cyl), .fun = function(x){x %>% map(~lm(formula=qsec~hp,data=.
 ## https://www.r-exercises.com/2018/01/19/functional-programming-with-purrr-exercises-part-2/
 
 ## accumulate()
-## detect() 
+## detect()
+## every()
+## keep()
+## has_element
+## safely()
+## transpose()
 vector10=1:10
 vector10 %>% accumulate(`*`)
 list(atoz=letters,num=1:10) %>% cross_df
 
 list1 = list('a', data.frame(1:10), TRUE, 1, letters, 153) 
 list1 %>% detect_index(is.numeric)
+
+list1 %>% every(is.atomic)
+
+list1 %>% keep(is.atomic)
+list1 %>% keep(is.numeric)
+list1 %>% keep(is.integer)
+
+list1 %>% has_element(.,.y="b")
+
+list1 %>% map(log)
+rapply(list1,log,classes = "numeric",how = "replace")
+list1 %>% rapply(log,classes = "numeric",how = "replace")
+
+
+## how transpose() works
+## if you had a list of length n where each component had values a and b, 
+## transpose() would make a list with elements a and b that contained lists of length n.
+
+aa=list1 %>% map(safely(log)) 
+## returns a list of 6, 
+## each element contains "result" and "error"
+
+bb=list1 %>% map(safely(log)) %>% transpose 
+## returns a list of length 2, which are "result" and "error", 
+## each element contains a list of 6 
+
+
+## invoke(), invoke_map()
+list2 = list(rnorm, runif, rcauchy)
+list2 %>% invoke_map(n=10)
+
+## rerun()
+rerun(5,runif(10))
+replicate(5,10) %>% map(runif) ## works similar to replicate()
+
+## flatten()
+rerun(5,runif(10)) %>% flatten_dbl()
+rerun(5,runif(10)) %>% unlist ## floatten_dbl() works similar to unlist()
