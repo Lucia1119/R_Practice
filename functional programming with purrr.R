@@ -89,13 +89,16 @@ mtcars %>% ddply(.(cyl), .fun=function(x){ x %>% map(mean) %>% unlist })
 mtcars %>% ddply(.(cyl), .fun = function(x){x %>% map(~lm(formula=qsec~hp,data=.))})
 ##_____________________________________________________
 
+
+
 ## https://www.r-exercises.com/2018/01/19/functional-programming-with-purrr-exercises-part-2/
+## https://www.r-exercises.com/2018/01/19/functional-programming-with-purrr-solutions-part-2/
 
 ## accumulate()
-## detect()
+## detect(), detect_index()
 ## every()
 ## keep()
-## has_element
+## has_element()
 ## safely()
 ## transpose()
 vector10=1:10
